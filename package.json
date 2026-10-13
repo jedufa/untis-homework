@@ -1,0 +1,14 @@
+{
+  "name": "untis-homework-offline",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Synthetic offline homework dashboard and native reference sources",
+  "license": "MIT",
+  "scripts": {
+    "test": "python3 -m unittest discover -s tests && playwright test",
+    "test:browser": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.60.0"
+  }
+}

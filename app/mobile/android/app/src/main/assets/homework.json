@@ -1,0 +1,134 @@
+{
+  "ok": true,
+  "fetchedAt": "2026-10-13T08:00:00",
+  "window": {
+    "start": "2026-10-06",
+    "end": "2026-10-27"
+  },
+  "children": {
+    "child1": {
+      "displayName": "Alex (fictional)",
+      "personId": 1000001,
+      "homeworks": [
+        {
+          "id": 1,
+          "subject": "M",
+          "subjectLongName": "Mathematics",
+          "teacher": "Demo teacher",
+          "text": "Explore equivalent fractions.\nDraw three examples and explain your reasoning.",
+          "dueDate": "2026-10-15",
+          "postedDate": "2026-10-12",
+          "dueDateLabel": "2026-10-15",
+          "status": "open",
+          "isArchived": false,
+          "isPastDue": false,
+          "attachments": []
+        },
+        {
+          "id": 2,
+          "subject": "E",
+          "subjectLongName": "English",
+          "teacher": "Demo teacher",
+          "text": "Read a short story and write a different ending.",
+          "dueDate": "2026-10-16",
+          "postedDate": "2026-10-12",
+          "dueDateLabel": "2026-10-16",
+          "status": "open",
+          "isArchived": false,
+          "isPastDue": false,
+          "attachments": []
+        },
+        {
+          "id": 3,
+          "subject": "SCI",
+          "subjectLongName": "Science",
+          "teacher": "Demo teacher",
+          "text": "Sketch the water cycle. Label evaporation and condensation.",
+          "dueDate": "2026-10-17",
+          "postedDate": "2026-10-12",
+          "dueDateLabel": "2026-10-17",
+          "status": "open",
+          "isArchived": false,
+          "isPastDue": false,
+          "attachments": []
+        },
+        {
+          "id": 4,
+          "subject": "ART",
+          "subjectLongName": "Art",
+          "teacher": "Demo teacher",
+          "text": "Bring your sketchbook and choose a favourite drawing.",
+          "dueDate": "2026-10-12",
+          "postedDate": "2026-10-12",
+          "dueDateLabel": "2026-10-12",
+          "status": "completed",
+          "isArchived": true,
+          "isPastDue": false,
+          "attachments": []
+        },
+        {
+          "id": 5,
+          "subject": "GEO",
+          "subjectLongName": "Geography",
+          "teacher": "Demo teacher",
+          "text": "Finish the map legend exercise.",
+          "dueDate": "2026-10-11",
+          "postedDate": "2026-10-12",
+          "dueDateLabel": "2026-10-11",
+          "status": "not_done",
+          "isArchived": true,
+          "isPastDue": true,
+          "attachments": []
+        }
+      ]
+    },
+    "child2": {
+      "displayName": "Robin (fictional)",
+      "personId": 1000002,
+      "homeworks": [
+        {
+          "id": 11,
+          "subject": "M",
+          "subjectLongName": "Mathematics",
+          "teacher": "Demo teacher",
+          "text": "Compare the perimeter of two rectangles.",
+          "dueDate": "2026-10-15",
+          "postedDate": "2026-10-12",
+          "dueDateLabel": "2026-10-15",
+          "status": "open",
+          "isArchived": false,
+          "isPastDue": false,
+          "attachments": []
+        },
+        {
+          "id": 12,
+          "subject": "MUS",
+          "subjectLongName": "Music",
+          "teacher": "Demo teacher",
+          "text": "Practise the rhythm pattern and clap it for a friend.",
+          "dueDate": "2026-10-16",
+          "postedDate": "2026-10-12",
+          "dueDateLabel": "2026-10-16",
+          "status": "open",
+          "isArchived": false,
+          "isPastDue": false,
+          "attachments": []
+        },
+        {
+          "id": 13,
+          "subject": "E",
+          "subjectLongName": "English",
+          "teacher": "Demo teacher",
+          "text": "Collect five interesting words from your reading.",
+          "dueDate": "2026-10-12",
+          "postedDate": "2026-10-12",
+          "dueDateLabel": "2026-10-12",
+          "status": "completed",
+          "isArchived": true,
+          "isPastDue": false,
+          "attachments": []
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,2333 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0d747a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Untis Homework">
+  <title>Untis Homework</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #edf2f5;
+      --bg-start: #f8fafb;
+      --bg-end: #e9eef1;
+      --panel: rgba(255, 255, 255, 0.86);
+      --surface: rgba(255, 255, 255, 0.74);
+      --surface-soft: rgba(255, 255, 255, 0.58);
+      --surface-strong: rgba(255, 255, 255, 0.96);
+      --input-bg: #ffffff;
+      --ink: #172126;
+      --muted: #64727b;
+      --line: rgba(120, 137, 148, 0.24);
+      --accent: #0d747a;
+      --accent-2: #169590;
+      --accent-ink: #f7ffff;
+      --late: #af3649;
+      --late-bg: #fff2f3;
+      --done: #4c7555;
+      --done-bg: #f2f7f3;
+      --shadow: 0 14px 34px rgba(31, 42, 55, 0.12);
+      --card-shadow: 0 7px 18px rgba(31, 42, 55, 0.08);
+      --custom-bg-image: none;
+      --domain-bg-color: rgba(255, 255, 255, 0.94);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f2024;
+        --bg-start: #10171b;
+        --bg-end: #16242a;
+        --panel: rgba(24, 31, 36, 0.9);
+        --surface: rgba(33, 42, 48, 0.84);
+        --surface-soft: rgba(30, 39, 45, 0.68);
+        --surface-strong: rgba(21, 28, 33, 0.98);
+        --input-bg: #11191e;
+        --ink: #e7eef2;
+        --muted: #a9b8c0;
+        --line: rgba(159, 181, 193, 0.25);
+        --accent-ink: #062326;
+        --late-bg: rgba(175, 54, 73, 0.2);
+        --done-bg: rgba(76, 117, 85, 0.22);
+        --shadow: 0 16px 38px rgba(0, 0, 0, 0.38);
+        --card-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+        --domain-bg-color: rgba(28, 38, 44, 0.94);
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(13, 116, 122, 0.14), transparent 32rem),
+        linear-gradient(135deg, var(--bg-start) 0%, var(--bg) 46%, var(--bg-end) 100%);
+      color: var(--ink);
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: var(--custom-bg-image);
+      background-size: cover;
+      background-position: center;
+      opacity: 0.18;
+      z-index: -1;
+    }
+    main { max-width: 980px; margin: 0 auto; padding: 18px 14px 32px; }
+    header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 12px;
+    }
+    h1 { margin: 0; font-size: 1.95rem; line-height: 1.1; font-weight: 720; letter-spacing: 0; }
+    .meta { color: var(--muted); font-size: 0.88rem; margin-top: 6px; }
+    .status {
+      min-height: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+      white-space: nowrap;
+      box-shadow: var(--card-shadow);
+    }
+    .status[data-state="loading"] { border-color: #b8c7c9; color: var(--accent); }
+    .status[data-state="error"] { border-color: #e1a8ad; background: var(--late-bg); color: var(--late); }
+    .controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .language {
+      min-height: 30px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--ink);
+      font: inherit;
+      font-size: 0.82rem;
+      font-weight: 750;
+      padding: 4px 9px;
+      box-shadow: var(--card-shadow);
+    }
+    .gear {
+      width: 32px;
+      height: 32px;
+      display: inline-grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--ink);
+      font-size: 1.05rem;
+      line-height: 1;
+      cursor: pointer;
+      box-shadow: var(--card-shadow);
+    }
+    .cancel-alert {
+      display: none;
+      min-height: 32px;
+      border: 1px solid rgba(210, 118, 28, 0.34);
+      border-radius: 999px;
+      padding: 0 11px;
+      background: linear-gradient(135deg, #f58f28, #ffbd63);
+      color: #321a04;
+      font: inherit;
+      font-size: 0.8rem;
+      font-weight: 850;
+      cursor: pointer;
+      box-shadow: var(--card-shadow);
+      white-space: nowrap;
+    }
+    .cancel-alert.show { display: inline-flex; align-items: center; }
+    .office-hours-button {
+      min-height: 32px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0 11px;
+      background: var(--surface);
+      color: var(--accent);
+      font: inherit;
+      font-size: 0.8rem;
+      font-weight: 850;
+      cursor: pointer;
+      box-shadow: var(--card-shadow);
+      white-space: nowrap;
+    }
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      padding: 5px;
+      margin-bottom: 10px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface-soft);
+      box-shadow: var(--card-shadow);
+    }
+    .tab {
+      min-height: 36px;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--muted);
+      font: inherit;
+      font-size: 0.95rem;
+      font-weight: 750;
+      cursor: pointer;
+    }
+    .tab.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: var(--accent-ink);
+      box-shadow: var(--card-shadow);
+    }
+    .subtabs {
+      display: inline-flex;
+      gap: 6px;
+      margin-bottom: 10px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface-soft);
+      box-shadow: var(--card-shadow);
+    }
+    .subtab {
+      min-height: 31px;
+      border: 0;
+      border-radius: 999px;
+      padding: 0 12px;
+      background: transparent;
+      color: var(--muted);
+      font: inherit;
+      font-size: 0.84rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .subtab.active {
+      background: rgba(13, 116, 122, 0.12);
+      color: var(--accent);
+    }
+    .summary {
+      display: grid;
+      gap: 3px;
+      margin-bottom: 10px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+      box-shadow: var(--card-shadow);
+    }
+    .summary-title {
+      margin: 0;
+      color: var(--ink);
+      font-size: 0.9rem;
+      font-weight: 850;
+      line-height: 1.2;
+    }
+    .summary-line {
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 650;
+      line-height: 1.3;
+    }
+    .panel {
+      min-width: 0;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(16px);
+    }
+    .section {
+      padding: 9px;
+      border-bottom: 1px solid var(--line);
+    }
+    .section:last-child { border-bottom: 0; }
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 0 2px 7px;
+      width: 100%;
+      border: 0;
+      background: transparent;
+      font: inherit;
+      cursor: pointer;
+      text-align: left;
+    }
+    .section-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .chevron {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1;
+      transition: transform 140ms ease;
+    }
+    .section.collapsed .chevron {
+      transform: rotate(-90deg);
+    }
+    .section.collapsed .list {
+      display: none;
+    }
+    h2 {
+      margin: 0;
+      font-size: 0.86rem;
+      line-height: 1.2;
+      color: var(--muted);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .count {
+      min-width: 2rem;
+      text-align: center;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(13, 116, 122, 0.11);
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 0.78rem;
+    }
+    .list { display: grid; gap: 6px; }
+    .notes-view {
+      display: none;
+      gap: 10px;
+    }
+    .notes-view.active { display: grid; }
+    .notes-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+      box-shadow: var(--card-shadow);
+    }
+    .notes-title {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.2;
+      font-weight: 850;
+    }
+    .notes-subtitle {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 650;
+    }
+    .note-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 8px;
+    }
+    .note-card {
+      display: grid;
+      gap: 8px;
+      min-width: 0;
+      padding: 11px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--note-color, #fff7cc);
+      box-shadow: var(--card-shadow);
+    }
+    .note-head {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      gap: 8px;
+      align-items: center;
+    }
+    .note-icon {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--surface);
+      font-weight: 850;
+    }
+    .note-title {
+      min-width: 0;
+      overflow-wrap: anywhere;
+      font-weight: 850;
+      line-height: 1.2;
+    }
+    .note-meta {
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 750;
+    }
+    .note-text {
+      margin: 0;
+      color: var(--ink);
+      font-size: 0.88rem;
+      line-height: 1.32;
+      white-space: pre-line;
+      overflow-wrap: anywhere;
+    }
+    .note-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 7px;
+    }
+    .homework {
+      position: relative;
+      display: grid;
+      gap: 3px;
+      min-width: 0;
+      grid-template-columns: 42px minmax(0, 1fr);
+      padding: 8px 10px 42px 10px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--domain-bg-color);
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+      touch-action: pan-y;
+      cursor: pointer;
+      transition: transform 150ms ease, opacity 150ms ease, background 150ms ease;
+    }
+    .homework::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 3px;
+      background: var(--accent);
+      z-index: 2;
+    }
+    .homework > * {
+      position: relative;
+      z-index: 1;
+    }
+    .study-icon {
+      grid-row: 1 / span 2;
+      width: 36px;
+      height: 36px;
+      display: inline-grid;
+      place-items: center;
+      align-self: start;
+      padding: 0;
+      border: 0;
+      border-radius: 11px;
+      background: linear-gradient(135deg, rgba(13, 116, 122, 0.13), rgba(22, 149, 144, 0.08));
+      color: var(--accent);
+      font: inherit;
+      font-size: 0.9rem;
+      font-weight: 850;
+      box-shadow: inset 0 0 0 1px rgba(13, 116, 122, 0.1);
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .study-icon img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+      padding: 3px;
+    }
+    .image-picker { display: none; }
+    .homework.completed {
+      border-color: rgba(76, 117, 85, 0.24);
+    }
+    .homework.completed::before { background: var(--done); }
+    .homework.not-done {
+      border-color: rgba(175, 54, 73, 0.22);
+    }
+    .homework.not-done::before { background: var(--late); }
+    .homework.completed .task {
+      text-decoration: line-through;
+      text-decoration-thickness: 2px;
+      text-decoration-color: rgba(76, 117, 85, 0.78);
+    }
+    .line {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-items: baseline;
+      min-width: 0;
+      color: var(--muted);
+      font-size: 0.75rem;
+      line-height: 1.2;
+    }
+    .due { color: var(--ink); font-weight: 760; }
+    .posted::before,
+    .teacher::before,
+    .subject::before,
+    .badge::before {
+      content: ".";
+      margin-right: 5px;
+      color: #96a2a9;
+    }
+    .subject { color: var(--accent); font-weight: 760; }
+    .teacher { color: var(--muted); font-weight: 650; }
+    .badge { font-weight: 800; }
+    .badge.completed { color: var(--done); }
+    .badge.not-done { color: var(--late); }
+    .task {
+      margin: 0;
+      min-width: 0;
+      overflow-wrap: anywhere;
+      white-space: pre-line;
+      line-height: 1.2;
+      font-size: 0.86rem;
+    }
+    .action {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      min-width: 58px;
+      min-height: 27px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--accent);
+      font: inherit;
+      font-size: 0.76rem;
+      font-weight: 800;
+      cursor: pointer;
+      z-index: 3;
+    }
+    .homework.completed .action { color: var(--done); }
+    .empty {
+      margin: 0;
+      padding: 11px;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border-radius: 10px;
+      font-size: 0.9rem;
+    }
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(16, 25, 32, 0.36);
+      backdrop-filter: blur(8px);
+      z-index: 20;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      width: min(420px, 100%);
+      max-height: min(86vh, 720px);
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface-strong);
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+    }
+    .modal.wide { width: min(620px, 100%); }
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .modal h2 {
+      color: var(--ink);
+      font-size: 1rem;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+    .close {
+      width: 30px;
+      height: 30px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .form {
+      display: grid;
+      gap: 10px;
+      min-height: 0;
+      overflow: auto;
+    }
+    .field {
+      display: grid;
+      gap: 5px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 750;
+    }
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      min-height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      padding: 7px 10px;
+      color: var(--ink);
+      font: inherit;
+      background: var(--input-bg);
+    }
+    .field textarea {
+      min-height: 96px;
+      resize: vertical;
+    }
+    .field input[type="range"] {
+      min-height: auto;
+      padding: 0;
+    }
+    .field input[type="color"] {
+      padding: 4px;
+      cursor: pointer;
+    }
+    .save {
+      min-height: 38px;
+      border: 0;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: var(--accent-ink);
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .settings-message {
+      min-height: 18px;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+    .detail-grid {
+      display: grid;
+      gap: 10px;
+      min-height: 0;
+      max-height: min(68vh, 560px);
+      overflow: auto;
+      padding-right: 4px;
+    }
+    .detail-grid[data-view="office-hours"] {
+      max-height: min(64vh, 520px);
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface-soft);
+    }
+    .detail-hero {
+      display: grid;
+      grid-template-columns: 54px minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+      padding: 10px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(13, 116, 122, 0.16), var(--surface));
+      border: 1px solid var(--line);
+    }
+    .teacher-avatar {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: var(--accent-ink);
+      font-weight: 850;
+    }
+    .detail-title {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.2;
+      font-weight: 850;
+    }
+    .detail-subtitle {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+    .detail-row {
+      display: grid;
+      grid-template-columns: 110px minmax(0, 1fr);
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 0.88rem;
+    }
+    .detail-row:last-child { border-bottom: 0; }
+    .detail-label {
+      color: var(--muted);
+      font-weight: 800;
+    }
+    .detail-value {
+      min-width: 0;
+      overflow-wrap: anywhere;
+      white-space: pre-line;
+    }
+    .domain-preview {
+      display: grid;
+      grid-template-columns: 48px minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface);
+    }
+    .domain-preview .study-icon {
+      width: 44px;
+      height: 44px;
+      cursor: pointer;
+    }
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .secondary {
+      min-height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0 12px;
+      background: var(--surface);
+      color: var(--ink);
+      font: inherit;
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .danger {
+      color: var(--late);
+      border-color: rgba(175, 54, 73, 0.26);
+    }
+    @media (max-width: 820px) {
+      main { padding: 14px 10px 26px; }
+      header { align-items: flex-start; flex-direction: column; }
+      .controls { width: 100%; justify-content: space-between; }
+      .status { white-space: normal; }
+    }
+    @media (max-width: 430px) {
+      h1 { font-size: 1.65rem; }
+      .homework { grid-template-columns: 38px minmax(0, 1fr); }
+      .action { min-width: 50px; font-size: 0.72rem; }
+      .detail-row { grid-template-columns: 1fr; gap: 3px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <p style="color:var(--accent);font-weight:700">OFFLINE DEMO · Fictional homework · No school connection</p>
+    <header>
+      <div>
+        <h1 data-i18n="title">Untis Homework</h1>
+        <div class="meta" id="meta">Loading fictional homework...</div>
+      </div>
+      <div class="controls">
+        <select class="language" id="language-select" aria-label="Language">
+          <option value="en">EN</option>
+          <option value="de">DE</option>
+          <option value="fr">FR</option>
+        </select>
+        <div class="status" id="status" data-state="loading">Refreshing</div>
+        <button class="cancel-alert" id="cancel-alert" type="button" data-i18n="cancelledButton">Cancelled</button>
+        <button class="office-hours-button" id="office-hours-button" type="button" data-i18n="officeHours">Office hours</button>
+        <button class="gear" id="settings-button" type="button" aria-label="Settings">⚙</button>
+      </div>
+    </header>
+
+    <nav class="tabs" aria-label="Children">
+      <button class="tab active" type="button" data-child-tab="child1">Alex</button>
+      <button class="tab" type="button" data-child-tab="child2">Robin</button>
+    </nav>
+
+    <nav class="subtabs" aria-label="Child space">
+      <button class="subtab active" type="button" data-child-view="homework" data-i18n="homeworkTab">Homework</button>
+      <button class="subtab" type="button" data-child-view="notes" data-i18n="notesTab">Notes</button>
+    </nav>
+
+    <section class="summary" id="progress-summary" aria-live="polite"></section>
+
+    <section class="panel" id="child-panel" aria-live="polite">
+      <section class="section">
+        <button class="section-head" type="button" data-collapse="homework" aria-expanded="true">
+          <span class="section-title"><span class="chevron">▾</span><h2 data-i18n="homework">Homework</h2></span>
+          <span class="count" id="open-count">0</span>
+        </button>
+        <div class="list" id="open-list"></div>
+      </section>
+
+      <section class="section archive-section">
+        <button class="section-head" type="button" data-collapse="archive" aria-expanded="true">
+          <span class="section-title"><span class="chevron">▾</span><h2 data-i18n="archive">Archive</h2></span>
+          <span class="count" id="archive-count">0</span>
+        </button>
+        <div class="list" id="archive-list"></div>
+      </section>
+    </section>
+
+    <section class="notes-view" id="notes-view" aria-live="polite">
+      <div class="notes-toolbar">
+        <div>
+          <p class="notes-title" data-i18n="personalNotes">Personal notes</p>
+          <div class="notes-subtitle" data-i18n="personalNotesSubtitle">Ideas, reminders, and things to keep.</div>
+        </div>
+        <button class="save" id="add-note-button" type="button" data-i18n="addNote">Add note</button>
+      </div>
+      <div class="note-list" id="note-list"></div>
+    </section>
+  </main>
+
+  <template id="homework-template">
+    <article class="homework">
+      <span class="study-icon" data-icon></span>
+      <div class="line">
+        <span class="due" data-due></span>
+        <span class="posted" data-posted></span>
+        <span class="subject" data-subject></span>
+        <span class="teacher" data-teacher></span>
+        <span class="badge" data-badge></span>
+      </div>
+      <p class="task" data-task></p>
+      <button class="action" type="button" data-action></button>
+    </article>
+  </template>
+
+  <div class="modal-backdrop" id="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <div class="modal">
+      <div class="modal-head">
+        <h2 id="settings-title" data-i18n="settings">Settings</h2>
+        <button class="close" id="settings-close" type="button" aria-label="Close">×</button>
+      </div>
+<p>No account is needed. All examples are fictional.</p><div class="form">
+        <label class="field">
+          <span data-i18n="themeProfile">Theme profile</span>
+          <select id="theme-profile">
+            <option value="ocean">Ocean</option>
+            <option value="berry">Berry</option>
+            <option value="forest">Forest</option>
+            <option value="graphite">Graphite</option>
+            <option value="sunrise">Sunrise</option>
+            <option value="mint">Mint</option>
+            <option value="paper">Paper</option>
+            <option value="night">Night</option>
+          </select>
+        </label>
+        <label class="field">
+          <span data-i18n="fontStyle">Font</span>
+          <select id="font-style">
+            <option value="system">System</option>
+            <option value="rounded">Rounded</option>
+            <option value="serif">Serif</option>
+            <option value="mono">Mono</option>
+            <option value="friendly">Friendly</option>
+            <option value="compact">Compact</option>
+            <option value="classic">Classic</option>
+          </select>
+        </label>
+        <label class="field">
+          <span data-i18n="backgroundImage">Background image</span>
+          <input id="background-image" type="file" accept="image/*">
+        </label>
+        <label class="field">
+          <span data-i18n="backgroundColor">Background color</span>
+          <input id="background-color" type="color" value="#edf2f5">
+        </label>
+        <div class="button-row">
+          <button class="secondary" id="reset-background-image" type="button" data-i18n="resetBackgroundImage">Reset background image</button>
+        </div>
+        <label class="field">
+          <span data-i18n="untisLogin">Untis login</span>
+          <input id="settings-username" name="username" autocomplete="username" required>
+        </label>
+<button class="save" type="button" onclick="resetOfflineDemo()">Reset this demo</button></div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="note-modal" role="dialog" aria-modal="true" aria-labelledby="note-title">
+    <div class="modal">
+      <div class="modal-head">
+        <h2 id="note-title" data-i18n="noteEditor">Note</h2>
+        <button class="close" id="note-close" type="button" aria-label="Close">×</button>
+      </div>
+      <form class="form" id="note-form">
+        <input id="note-id" type="hidden">
+        <label class="field">
+          <span data-i18n="noteTitle">Title</span>
+          <input id="note-title-input" maxlength="80" required>
+        </label>
+        <label class="field">
+          <span data-i18n="noteText">Text</span>
+          <textarea id="note-text" maxlength="2000" rows="5"></textarea>
+        </label>
+        <label class="field">
+          <span data-i18n="noteCategory">Category</span>
+          <select id="note-category">
+            <option value="idea" data-i18n="categoryIdea">Idea</option>
+            <option value="school" data-i18n="categorySchool">School</option>
+            <option value="remember" data-i18n="categoryRemember">Remember</option>
+            <option value="personal" data-i18n="categoryPersonal">Personal</option>
+          </select>
+        </label>
+        <label class="field">
+          <span data-i18n="noteDate">Date</span>
+          <input id="note-date" type="date">
+        </label>
+        <label class="field">
+          <span data-i18n="noteColor">Color</span>
+          <input id="note-color" type="color" value="#fff7cc">
+        </label>
+        <label class="field">
+          <span data-i18n="noteIcon">Icon</span>
+          <select id="note-icon">
+            <option value="✦">✦</option>
+            <option value="★">★</option>
+            <option value="✓">✓</option>
+            <option value="!">!</option>
+            <option value="?">?</option>
+            <option value="♡">♡</option>
+            <option value="♪">♪</option>
+          </select>
+        </label>
+        <button class="save" type="submit" data-i18n="saveNote">Save note</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="detail-modal" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+    <div class="modal wide">
+      <div class="modal-head">
+        <h2 id="detail-title" data-i18n="details">Details</h2>
+        <button class="close" id="detail-close" type="button" aria-label="Close">×</button>
+      </div>
+      <div class="detail-grid" id="detail-content"></div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="domain-modal" role="dialog" aria-modal="true" aria-labelledby="domain-title">
+    <div class="modal">
+      <div class="modal-head">
+        <h2 id="domain-title" data-i18n="domainSettings">Subject style</h2>
+        <button class="close" id="domain-close" type="button" aria-label="Close">×</button>
+      </div>
+      <div class="form">
+        <div class="domain-preview">
+          <span class="study-icon" id="domain-preview-icon"></span>
+          <div>
+            <p class="detail-title" id="domain-preview-title"></p>
+            <div class="detail-subtitle" data-i18n="domainAppliesToChild">Only for this child</div>
+          </div>
+        </div>
+        <div class="button-row">
+          <button class="secondary" id="choose-domain-image" type="button" data-i18n="chooseImage">Choose image</button>
+          <button class="secondary" id="reset-domain-image" type="button" data-i18n="resetIcon">Reset icon</button>
+        </div>
+        <label class="field">
+          <span data-i18n="domainColor">Subject color</span>
+          <input id="domain-color" type="color" value="#ffffff">
+        </label>
+        <div class="button-row">
+          <button class="secondary" id="reset-domain-color" type="button" data-i18n="resetColor">Reset color</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="demo-data.js"></script>
+  <script src="offline-store.js"></script>
+  <script>
+    const tabs = [...document.querySelectorAll("[data-child-tab]")];
+    const childViewTabs = [...document.querySelectorAll("[data-child-view]")];
+    const statusEl = document.querySelector("#status");
+    const metaEl = document.querySelector("#meta");
+    const languageSelect = document.querySelector("#language-select");
+    const settingsButton = document.querySelector("#settings-button");
+    const settingsModal = document.querySelector("#settings-modal");
+    const settingsClose = document.querySelector("#settings-close");
+    const themeProfile = document.querySelector("#theme-profile");
+    const fontStyle = document.querySelector("#font-style");
+    const backgroundImage = document.querySelector("#background-image");
+    const backgroundColor = document.querySelector("#background-color");
+    const resetBackgroundImage = document.querySelector("#reset-background-image");
+    const detailModal = document.querySelector("#detail-modal");
+    const detailClose = document.querySelector("#detail-close");
+    const detailTitle = document.querySelector("#detail-title");
+    const detailContent = document.querySelector("#detail-content");
+    const domainModal = document.querySelector("#domain-modal");
+    const domainClose = document.querySelector("#domain-close");
+    const domainPreviewIcon = document.querySelector("#domain-preview-icon");
+    const domainPreviewTitle = document.querySelector("#domain-preview-title");
+    const chooseDomainImage = document.querySelector("#choose-domain-image");
+    const resetDomainImage = document.querySelector("#reset-domain-image");
+    const domainColor = document.querySelector("#domain-color");
+    const resetDomainColor = document.querySelector("#reset-domain-color");
+    const cancelAlert = document.querySelector("#cancel-alert");
+    const officeHoursButton = document.querySelector("#office-hours-button");
+    const template = document.querySelector("#homework-template");
+    const archiveList = document.querySelector("#archive-list");
+    const openList = document.querySelector("#open-list");
+    const archiveCount = document.querySelector("#archive-count");
+    const openCount = document.querySelector("#open-count");
+    const progressSummary = document.querySelector("#progress-summary");
+    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+    const darkSchemeQuery = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : { matches: false, addEventListener: () => {} };
+    const notesView = document.querySelector("#notes-view");
+    const noteList = document.querySelector("#note-list");
+    const addNoteButton = document.querySelector("#add-note-button");
+    const noteModal = document.querySelector("#note-modal");
+    const noteClose = document.querySelector("#note-close");
+    const noteForm = document.querySelector("#note-form");
+    const noteId = document.querySelector("#note-id");
+    const noteTitleInput = document.querySelector("#note-title-input");
+    const noteText = document.querySelector("#note-text");
+    const noteCategory = document.querySelector("#note-category");
+    const noteDate = document.querySelector("#note-date");
+    const noteColor = document.querySelector("#note-color");
+    const noteIcon = document.querySelector("#note-icon");
+    const collapseButtons = [...document.querySelectorAll("[data-collapse]")];
+    const HOMEWORK_CACHE_KEY = "untis-oss-homeworks-cache";
+    const CANCELLATIONS_CACHE_KEY = "untis-oss-cancellations-cache";
+    const OFFICE_HOURS_CACHE_KEY = "untis-oss-office-hours-cache";
+    const NOTES_CACHE_KEY = "untis-oss-notes-cache";
+
+    function appMountPath() {
+      const marker = "/app";
+      const path = window.location.pathname || "";
+      const index = path.indexOf(marker);
+      if (index < 0) return "";
+      return path.slice(0, index + marker.length);
+    }
+
+    function apiPath(path) {
+      const value = String(path || "");
+      const mount = appMountPath();
+      const apiRoot = "/" + "api/";
+      if (!value.startsWith("/")) return value;
+      if (mount && value.startsWith(mount + apiRoot)) return value;
+      if (mount && value.startsWith(apiRoot)) return mount + value;
+      return value;
+    }
+
+    let payload = null;
+    let cancellations = null;
+    let officeHours = null;
+    let notesPayload = null;
+    let activeChild = localStorage.getItem("untis-oss-active-child") || "child1";
+    let activeChildView = localStorage.getItem("untis-oss-active-child-view") || "homework";
+    let language = localStorage.getItem("untis-oss-language") || preferredLanguage();
+    let domainIcons = { icons: {}, children: {} };
+    let domainStyles = loadCachedDomainStyles();
+    let imageTargetKey = "";
+    let domainTargetKey = "";
+    let domainTargetSubject = "";
+    let appearance = loadCachedAppearance();
+
+    const i18n = {
+      en: {
+        title: "Untis Homework",
+        homeworkTab: "Homework",
+        notesTab: "Notes",
+        personalNotes: "Personal notes",
+        personalNotesSubtitle: "Ideas, reminders, and things to keep.",
+        addNote: "Add note",
+        noNotes: "No notes yet.",
+        edit: "Edit",
+        delete: "Delete",
+        noteEditor: "Note",
+        noteTitle: "Title",
+        noteText: "Text",
+        noteCategory: "Category",
+        noteDate: "Date",
+        noteColor: "Color",
+        noteIcon: "Icon",
+        saveNote: "Save note",
+        categoryIdea: "Idea",
+        categorySchool: "School",
+        categoryRemember: "Remember",
+        categoryPersonal: "Personal",
+        homework: "Homework",
+        archive: "Archive",
+        loadingWebUntis: "Loading fictional homework...",
+        refreshing: "Refreshing",
+        saving: "Saving",
+        live: "Offline demo",
+        saveFailed: "Save failed",
+        webUntisUnavailable: "WebUntis unavailable",
+        offlineCache: "Offline copy",
+        nothingArchived: "Nothing archived.",
+        noOpenHomework: "No open homework.",
+        dueOn: "Due on",
+        noDueDate: "No due date",
+        posted: "posted",
+        subject: "Subject",
+        completed: "completed",
+        notDone: "not done",
+        open: "open",
+        done: "Mark complete",
+        reopen: "Reopen",
+        weeklySummary: "Weekly summary",
+        weeklyStats: "{completed} complete, {open} open, {missed} missed this week.",
+        activeDays: "{days} active day(s) recently.",
+        updated: "Updated",
+        to: "to",
+        settings: "Settings",
+        untisLogin: "Untis login",
+        saveSettings: "Save settings",
+        settingsSaved: "Settings saved.",
+        settingsSaveFailed: "Could not save settings.",
+        themeProfile: "Theme profile",
+        fontStyle: "Font",
+        backgroundImage: "Background image",
+        backgroundColor: "Background color",
+        resetBackgroundImage: "Reset background image",
+        details: "Details",
+        teacherContact: "Teacher contact",
+        contactUnavailable: "No teacher photo, contact data, or office hours were available from WebUntis for this homework.",
+        officeHours: "Office hours",
+        noOfficeHours: "No office hours are available from WebUntis.",
+        available: "Available",
+        unavailable: "Unavailable",
+        attachments: "Attachments",
+        none: "None",
+        task: "Task",
+        status: "Status",
+        domainSettings: "Subject style",
+        domainAppliesToChild: "Only for this child",
+        chooseImage: "Choose image",
+        resetIcon: "Reset icon",
+        domainColor: "Subject color",
+        resetColor: "Reset color",
+        cancelledButton: "Cancelled",
+        cancelledTitle: "Cancelled lessons",
+        noCancellations: "No cancelled lessons today or later.",
+        date: "Date",
+        time: "Time",
+        room: "Room",
+        weekdays: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+      },
+      de: {
+        title: "Untis Hausaufgaben",
+        homeworkTab: "Hausaufgaben",
+        notesTab: "Notizen",
+        personalNotes: "Persönliche Notizen",
+        personalNotesSubtitle: "Ideen, Erinnerungen und Dinge zum Behalten.",
+        addNote: "Notiz hinzufügen",
+        noNotes: "Noch keine Notizen.",
+        edit: "Bearbeiten",
+        delete: "Löschen",
+        noteEditor: "Notiz",
+        noteTitle: "Titel",
+        noteText: "Text",
+        noteCategory: "Kategorie",
+        noteDate: "Datum",
+        noteColor: "Farbe",
+        noteIcon: "Icon",
+        saveNote: "Notiz speichern",
+        categoryIdea: "Idee",
+        categorySchool: "Schule",
+        categoryRemember: "Merken",
+        categoryPersonal: "Persönlich",
+        homework: "Hausaufgaben",
+        archive: "Archiv",
+        loadingWebUntis: "Lade WebUntis...",
+        refreshing: "Aktualisieren",
+        saving: "Speichern",
+        live: "Offline demo",
+        saveFailed: "Speichern fehlgeschlagen",
+        webUntisUnavailable: "WebUntis nicht erreichbar",
+        offlineCache: "Offline-Kopie",
+        nothingArchived: "Nichts im Archiv.",
+        noOpenHomework: "Keine offenen Hausaufgaben.",
+        dueOn: "Fällig am",
+        noDueDate: "Kein Fälligkeitsdatum",
+        posted: "erstellt",
+        subject: "Fach",
+        completed: "erledigt",
+        notDone: "nicht erledigt",
+        open: "offen",
+        done: "Als erledigt markieren",
+        reopen: "Zurück",
+        weeklySummary: "Wochenüberblick",
+        weeklyStats: "{completed} erledigt, {open} offen, {missed} verpasst diese Woche.",
+        activeDays: "{days} aktive Tag(e) in letzter Zeit.",
+        updated: "Aktualisiert",
+        to: "bis",
+        settings: "Einstellungen",
+        untisLogin: "Untis Login",
+        saveSettings: "Einstellungen speichern",
+        settingsSaved: "Einstellungen gespeichert.",
+        settingsSaveFailed: "Einstellungen konnten nicht gespeichert werden.",
+        themeProfile: "Farbschema",
+        fontStyle: "Schrift",
+        backgroundImage: "Hintergrundbild",
+        backgroundColor: "Hintergrundfarbe",
+        resetBackgroundImage: "Hintergrundbild zurücksetzen",
+        details: "Details",
+        teacherContact: "Kontakt Lehrkraft",
+        contactUnavailable: "Kein Foto, keine Kontaktdaten und keine Sprechstunden der Lehrkraft waren für diese Hausaufgabe in WebUntis verfügbar.",
+        officeHours: "Sprechstunden",
+        noOfficeHours: "Keine Sprechstunden in WebUntis verfügbar.",
+        available: "Verfügbar",
+        unavailable: "Nicht verfügbar",
+        attachments: "Anhänge",
+        none: "Keine",
+        task: "Aufgabe",
+        status: "Status",
+        domainSettings: "Fach-Stil",
+        domainAppliesToChild: "Nur für dieses Kind",
+        chooseImage: "Bild wählen",
+        resetIcon: "Icon zurücksetzen",
+        domainColor: "Fachfarbe",
+        resetColor: "Farbe zurücksetzen",
+        cancelledButton: "ENTFÄLLT",
+        cancelledTitle: "Entfallene Stunden",
+        noCancellations: "Keine entfallenen Stunden ab heute.",
+        date: "Datum",
+        time: "Zeit",
+        room: "Raum",
+        weekdays: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
+      },
+      fr: {
+        title: "Devoirs Untis",
+        homeworkTab: "Devoirs",
+        notesTab: "Notes",
+        personalNotes: "Notes personnelles",
+        personalNotesSubtitle: "Idees, rappels et choses a garder.",
+        addNote: "Ajouter une note",
+        noNotes: "Pas encore de notes.",
+        edit: "Modifier",
+        delete: "Supprimer",
+        noteEditor: "Note",
+        noteTitle: "Titre",
+        noteText: "Texte",
+        noteCategory: "Categorie",
+        noteDate: "Date",
+        noteColor: "Couleur",
+        noteIcon: "Icone",
+        saveNote: "Enregistrer la note",
+        categoryIdea: "Idee",
+        categorySchool: "Ecole",
+        categoryRemember: "A retenir",
+        categoryPersonal: "Personnel",
+        homework: "Devoirs",
+        archive: "Archive",
+        loadingWebUntis: "Chargement WebUntis...",
+        refreshing: "Actualisation",
+        saving: "Enregistrement",
+        live: "Offline demo",
+        saveFailed: "Echec de l'enregistrement",
+        webUntisUnavailable: "WebUntis indisponible",
+        offlineCache: "Copie hors ligne",
+        nothingArchived: "Rien dans l'archive.",
+        noOpenHomework: "Aucun devoir ouvert.",
+        dueOn: "Pour le",
+        noDueDate: "Pas d'echeance",
+        posted: "cree",
+        subject: "Matiere",
+        completed: "termine",
+        notDone: "non fait",
+        open: "ouvert",
+        done: "Marquer termine",
+        reopen: "Rouvrir",
+        weeklySummary: "Résumé de la semaine",
+        weeklyStats: "{completed} terminé, {open} ouvert, {missed} manqué cette semaine.",
+        activeDays: "{days} jour(s) actif(s) récemment.",
+        updated: "Actualise",
+        to: "au",
+        settings: "Parametres",
+        untisLogin: "Identifiant Untis",
+        saveSettings: "Enregistrer",
+        settingsSaved: "Parametres enregistres.",
+        settingsSaveFailed: "Impossible d'enregistrer les parametres.",
+        themeProfile: "Theme",
+        fontStyle: "Police",
+        backgroundImage: "Image de fond",
+        backgroundColor: "Couleur de fond",
+        resetBackgroundImage: "Retablir l'image de fond",
+        details: "Details",
+        teacherContact: "Contact enseignant",
+        contactUnavailable: "Aucune photo, coordonnee ou heure de permanence de l'enseignant n'etait disponible dans WebUntis pour ce devoir.",
+        officeHours: "Permanences",
+        noOfficeHours: "Aucune permanence n'est disponible dans WebUntis.",
+        available: "Disponible",
+        unavailable: "Indisponible",
+        attachments: "Pieces jointes",
+        none: "Aucune",
+        task: "Devoir",
+        status: "Statut",
+        domainSettings: "Style matiere",
+        domainAppliesToChild: "Seulement pour cet enfant",
+        chooseImage: "Choisir une image",
+        resetIcon: "Retablir l'icone",
+        domainColor: "Couleur de la matiere",
+        resetColor: "Retablir la couleur",
+        cancelledButton: "Annulé",
+        cancelledTitle: "Cours annulés",
+        noCancellations: "Aucun cours annulé à partir d'aujourd'hui.",
+        date: "Date",
+        time: "Heure",
+        room: "Salle",
+        weekdays: ["Lu", "Ma", "Me", "Je", "Ve", "Sa", "Di"],
+      },
+    };
+
+    languageSelect.value = language;
+    tabs.forEach((item) => item.classList.toggle("active", item.dataset.childTab === activeChild));
+    childViewTabs.forEach((item) => item.classList.toggle("active", item.dataset.childView === activeChildView));
+    initAppearanceControls();
+    applyAppearance();
+    applyLanguage();
+    applyChildView();
+
+    languageSelect.addEventListener("change", () => {
+      language = languageSelect.value;
+      localStorage.setItem("untis-oss-language", language);
+      applyLanguage();
+      renderActiveChild();
+      updateCancellationButton();
+      if (payload) {
+        metaEl.textContent = `${tr("updated")} ${payload.fetchedAt.replace("T", " ")} · ${formatIso(payload.window.start)} ${tr("to")} ${formatIso(payload.window.end)}`;
+      }
+    });
+
+    settingsButton.addEventListener("click", openSettings);
+    settingsClose.addEventListener("click", closeSettings);
+    settingsModal.addEventListener("click", (event) => {
+      if (event.target === settingsModal) closeSettings();
+    });
+    detailClose.addEventListener("click", closeDetails);
+    detailModal.addEventListener("click", (event) => {
+      if (event.target === detailModal) closeDetails();
+    });
+    domainClose.addEventListener("click", closeDomainSettings);
+    domainModal.addEventListener("click", (event) => {
+      if (event.target === domainModal) closeDomainSettings();
+    });
+    noteClose.addEventListener("click", closeNoteEditor);
+    noteModal.addEventListener("click", (event) => {
+      if (event.target === noteModal) closeNoteEditor();
+    });
+    noteForm.addEventListener("submit", saveNote);
+    addNoteButton.addEventListener("click", () => openNoteEditor());
+    themeProfile.addEventListener("change", () => updateAppearance({ theme: themeProfile.value }));
+    fontStyle.addEventListener("change", () => updateAppearance({ font: fontStyle.value }));
+    backgroundColor.addEventListener("input", () => updateAppearance({ bgColor: backgroundColor.value }));
+    darkSchemeQuery.addEventListener("change", applyAppearance);
+    backgroundImage.addEventListener("change", saveBackgroundImage);
+    resetBackgroundImage.addEventListener("click", resetCustomBackgroundImage);
+    chooseDomainImage.addEventListener("click", () => {
+      imageTargetKey = domainTargetKey;
+      imagePicker.value = "";
+      imagePicker.click();
+    });
+    domainPreviewIcon.addEventListener("click", () => {
+      imageTargetKey = domainTargetKey;
+      imagePicker.value = "";
+      imagePicker.click();
+    });
+    resetDomainImage.addEventListener("click", resetPickedDomainImage);
+    domainColor.addEventListener("input", updateDomainColor);
+    resetDomainColor.addEventListener("click", resetDomainColorValue);
+    cancelAlert.addEventListener("click", openCancellations);
+    officeHoursButton.addEventListener("click", openOfficeHours);
+    document.body.insertAdjacentHTML("beforeend", '<input class="image-picker" id="image-picker" type="file" accept="image/*">');
+    const imagePicker = document.querySelector("#image-picker");
+    imagePicker.addEventListener("change", savePickedDomainImage);
+
+    collapseButtons.forEach((button) => {
+      const section = button.closest(".section");
+      const key = `untis-oss-section-${button.dataset.collapse}-collapsed`;
+      const collapsed = localStorage.getItem(key) === "true";
+      section.classList.toggle("collapsed", collapsed);
+      button.setAttribute("aria-expanded", String(!collapsed));
+      button.addEventListener("click", () => {
+        const nextCollapsed = !section.classList.contains("collapsed");
+        section.classList.toggle("collapsed", nextCollapsed);
+        button.setAttribute("aria-expanded", String(!nextCollapsed));
+        localStorage.setItem(key, String(nextCollapsed));
+      });
+    });
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        activeChild = tab.dataset.childTab;
+        localStorage.setItem("untis-oss-active-child", activeChild);
+        tabs.forEach((item) => item.classList.toggle("active", item === tab));
+        appearance = loadCachedAppearance();
+        initAppearanceControls();
+        applyAppearance();
+        loadServerPreferences();
+        renderActiveChild();
+        updateCancellationButton();
+      });
+    });
+
+    childViewTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        activeChildView = tab.dataset.childView;
+        localStorage.setItem("untis-oss-active-child-view", activeChildView);
+        childViewTabs.forEach((item) => item.classList.toggle("active", item === tab));
+        applyChildView();
+      });
+    });
+
+    function applyChildView() {
+      const notesActive = activeChildView === "notes";
+      progressSummary.style.display = notesActive ? "none" : "";
+      document.querySelector("#child-panel").style.display = notesActive ? "none" : "";
+      notesView.classList.toggle("active", notesActive);
+      if (notesActive) renderNotes();
+    }
+
+    function preferredLanguage() {
+      const lang = (navigator.language || "en").slice(0, 2).toLowerCase();
+      return ["en", "de", "fr"].includes(lang) ? lang : "en";
+    }
+
+    function tr(key) {
+      return i18n[language][key] || i18n.en[key] || key;
+    }
+
+    function applyLanguage() {
+      document.documentElement.lang = language;
+      document.querySelectorAll("[data-i18n]").forEach((node) => {
+        node.textContent = tr(node.dataset.i18n);
+      });
+      if (!payload) {
+        metaEl.textContent = tr("loadingWebUntis");
+      }
+    }
+
+    function loadCachedAppearance() {
+      try {
+        return JSON.parse(localStorage.getItem(`untis-oss-appearance-${activeChild}`) || "{}");
+      } catch {
+        return {};
+      }
+    }
+
+    function loadCachedDomainStyles() {
+      try {
+        return JSON.parse(localStorage.getItem("untis-oss-domain-styles") || "{}");
+      } catch {
+        return {};
+      }
+    }
+
+    function saveDomainStyles() {
+      localStorage.setItem("untis-oss-domain-styles", JSON.stringify(domainStyles));
+      demoRequest(apiPath("/api/domain-styles"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ children: domainStyles }),
+      }).catch(() => {});
+    }
+
+    async function loadServerPreferences() {
+      await Promise.all([loadServerAppearance(), loadServerDomainStyles()]);
+      initAppearanceControls();
+      applyAppearance();
+      if (payload) renderActiveChild();
+    }
+
+    async function loadServerAppearance() {
+      try {
+        const response = await demoRequest(apiPath("/api/appearance"), { cache: "no-store" });
+        const result = await response.json();
+        const serverAppearance = result.children?.[activeChild];
+        if (response.ok && result.ok && serverAppearance) {
+          appearance = serverAppearance;
+          localStorage.setItem(`untis-oss-appearance-${activeChild}`, JSON.stringify(appearance));
+        }
+      } catch {
+        appearance = loadCachedAppearance();
+      }
+    }
+
+    async function loadServerDomainStyles() {
+      try {
+        const response = await demoRequest(apiPath("/api/domain-styles"), { cache: "no-store" });
+        const result = await response.json();
+        if (response.ok && result.ok && result.children) {
+          domainStyles = result.children;
+          localStorage.setItem("untis-oss-domain-styles", JSON.stringify(domainStyles));
+        }
+      } catch {
+        domainStyles = loadCachedDomainStyles();
+      }
+    }
+
+    function initAppearanceControls() {
+      themeProfile.value = appearance.theme || "ocean";
+      fontStyle.value = appearance.font || "system";
+      backgroundColor.value = appearance.bgColor || "#edf2f5";
+    }
+
+    function updateAppearance(next) {
+      appearance = { ...appearance, ...next };
+      localStorage.setItem(`untis-oss-appearance-${activeChild}`, JSON.stringify(appearance));
+      demoRequest(apiPath("/api/appearance"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ child: activeChild, appearance }),
+      }).catch(() => {});
+      applyAppearance();
+    }
+
+    function applyAppearance() {
+      const themes = {
+        ocean: { bg: "#edf2f5", bgDark: "#0f2024", accent: "#0d747a", accentDark: "#6bd6d0", accent2: "#169590", late: "#af3649", done: "#4c7555" },
+        berry: { bg: "#f4eef4", bgDark: "#281923", accent: "#8d3d76", accentDark: "#f0a7cb", accent2: "#c05d8e", late: "#b2394a", done: "#497358" },
+        forest: { bg: "#eef3ef", bgDark: "#14241a", accent: "#327052", accentDark: "#94d99b", accent2: "#66a06b", late: "#a84a3d", done: "#376d48" },
+        graphite: { bg: "#eef0f2", bgDark: "#171d22", accent: "#3f5666", accentDark: "#a9c0cf", accent2: "#6c8493", late: "#a74451", done: "#4f7057" },
+        sunrise: { bg: "#f7f1ea", bgDark: "#281d17", accent: "#b25742", accentDark: "#f0b477", accent2: "#e09a53", late: "#a33c4a", done: "#4f7a59" },
+        mint: { bg: "#edf6f1", bgDark: "#10231f", accent: "#187b70", accentDark: "#8ee3c2", accent2: "#5bbf9d", late: "#aa4050", done: "#3f7b59" },
+        paper: { bg: "#f4f2ec", bgDark: "#221f1a", accent: "#6d5a46", accentDark: "#d6bf96", accent2: "#a48b65", late: "#a4404c", done: "#526f53" },
+        night: { bg: "#e9edf3", bgDark: "#111827", accent: "#394b7a", accentDark: "#b8b4ff", accent2: "#7572b7", late: "#a63d5b", done: "#3f7463" },
+      };
+      const fonts = {
+        system: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+        rounded: '"Trebuchet MS", "Segoe UI", system-ui, sans-serif',
+        serif: 'Georgia, "Times New Roman", serif',
+        mono: '"Cascadia Code", "Consolas", monospace',
+        friendly: '"Comic Sans MS", "Trebuchet MS", system-ui, sans-serif',
+        compact: 'Arial, "Helvetica Neue", sans-serif',
+        classic: '"Palatino Linotype", Palatino, Georgia, serif',
+      };
+      const theme = themes[appearance.theme || "ocean"] || themes.ocean;
+      const dark = darkSchemeQuery.matches;
+      const background = appearance.bgColor || (dark ? theme.bgDark : theme.bg);
+      const accent = dark ? theme.accentDark : theme.accent;
+      document.documentElement.dataset.scheme = dark ? "dark" : "light";
+      document.documentElement.style.setProperty("--bg", background);
+      document.documentElement.style.setProperty("--accent", accent);
+      document.documentElement.style.setProperty("--accent-2", theme.accent2);
+      document.documentElement.style.setProperty("--late", theme.late);
+      document.documentElement.style.setProperty("--done", theme.done);
+      document.documentElement.style.setProperty("--custom-bg-image", appearance.bgImage ? `url("${appearance.bgImage}")` : "none");
+      if (themeColorMeta) themeColorMeta.setAttribute("content", accent);
+      document.body.style.fontFamily = fonts[appearance.font || "system"] || fonts.system;
+    }
+
+    async function saveBackgroundImage() {
+      const file = backgroundImage.files && backgroundImage.files[0];
+      if (!file) return;
+      const image = await readFileAsDataUrl(file);
+      updateAppearance({ bgImage: image });
+    }
+
+    function resetCustomBackgroundImage() {
+      updateAppearance({ bgImage: "" });
+      backgroundImage.value = "";
+    }
+
+    function openSettings() { settingsModal.classList.add("open"); }
+    function closeSettings() { settingsModal.classList.remove("open"); }
+
+    function setStatus(key, state) {
+      statusEl.textContent = tr(key);
+      statusEl.dataset.state = state;
+    }
+
+    function renderActiveChild() {
+      if (!payload) return;
+      const child = payload.children[activeChild];
+      const archive = child.homeworks.filter((homework) => homework.isArchived);
+      const open = child.homeworks.filter((homework) => !homework.isArchived);
+      renderList(archiveList, archive, tr("nothingArchived"));
+      renderList(openList, open, tr("noOpenHomework"));
+      archiveCount.textContent = archive.length;
+      openCount.textContent = open.length;
+      renderProgressSummary(child.homeworks);
+      renderNotes();
+      applyChildView();
+      updateCancellationButton();
+    }
+
+    function renderProgressSummary(homeworks) {
+      const summary = weeklyProgress(homeworks);
+      progressSummary.replaceChildren(
+        htmlNode("p", "summary-title", tr("weeklySummary")),
+        htmlNode("div", "summary-line", templateText("weeklyStats", {
+          completed: summary.completed,
+          open: summary.open,
+          missed: summary.missed,
+        })),
+        htmlNode("div", "summary-line", templateText("activeDays", { days: summary.activeDays })),
+      );
+    }
+
+    function weeklyProgress(homeworks) {
+      const today = localDate();
+      const weekStart = new Date(today);
+      weekStart.setDate(today.getDate() - ((today.getDay() + 6) % 7));
+      const weekEnd = new Date(weekStart);
+      weekEnd.setDate(weekStart.getDate() + 6);
+      const completedDates = new Set();
+      let completed = 0;
+      let open = 0;
+      let missed = 0;
+      homeworks.forEach((homework) => {
+        const dueDate = parseLocalDate(homework.dueDate);
+        const completedDate = parseLocalDate(homework.completedAt || homework.dueDate);
+        if (homework.status === "completed" && completedDate) {
+          completedDates.add(toIsoDate(completedDate));
+          if (dateInRange(completedDate, weekStart, weekEnd)) completed += 1;
+        }
+        if (homework.status === "open" && dueDate && dateInRange(dueDate, weekStart, weekEnd)) open += 1;
+        if (homework.status === "not_done" && dueDate && dateInRange(dueDate, weekStart, weekEnd)) missed += 1;
+      });
+      return { completed, open, missed, activeDays: recentActiveDays(completedDates, today) };
+    }
+
+    function recentActiveDays(completedDates, today) {
+      let days = 0;
+      for (let index = 0; index < 28; index += 1) {
+        const cursor = new Date(today);
+        cursor.setDate(today.getDate() - index);
+        if (!completedDates.has(toIsoDate(cursor))) continue;
+        days += 1;
+      }
+      return days;
+    }
+
+    function templateText(key, values) {
+      return Object.entries(values).reduce(
+        (text, [name, value]) => text.replace(`{${name}}`, String(value)),
+        tr(key),
+      );
+    }
+
+    function dateInRange(value, start, end) {
+      return value >= start && value <= end;
+    }
+
+    function localDate() {
+      const now = new Date("2026-10-13T12:00:00Z");
+      return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    }
+
+    function parseLocalDate(value) {
+      if (!value) return null;
+      const [year, month, day] = String(value).split("-").map(Number);
+      if (!year || !month || !day) return null;
+      return new Date(year, month - 1, day);
+    }
+
+    function toIsoDate(value) {
+      const year = value.getFullYear();
+      const month = String(value.getMonth() + 1).padStart(2, "0");
+      const day = String(value.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    function renderList(list, homeworks, emptyText) {
+      list.replaceChildren();
+      if (!homeworks.length) {
+        const empty = document.createElement("p");
+        empty.className = "empty";
+        empty.textContent = emptyText;
+        list.append(empty);
+        return;
+      }
+      homeworks.forEach((homework) => list.append(renderHomework(homework)));
+    }
+
+    function renderNotes() {
+      if (!noteList) return;
+      const notes = notesPayload?.children?.[activeChild] || [];
+      noteList.replaceChildren();
+      if (!notes.length) {
+        noteList.append(htmlNode("p", "empty", tr("noNotes")));
+        return;
+      }
+      notes.forEach((note) => noteList.append(renderNote(note)));
+    }
+
+    function renderNote(note) {
+      const node = htmlNode("article", "note-card", []);
+      node.style.setProperty("--note-color", note.color || "#fff7cc");
+      node.append(
+        htmlNode("div", "note-head", [
+          htmlNode("div", "note-icon", note.icon || "✦"),
+          htmlNode("div", "", [
+            htmlNode("div", "note-title", note.title || tr("noteEditor")),
+            htmlNode("div", "note-meta", [categoryLabel(note.category), formatIso(note.date)].filter(Boolean).join(" · ")),
+          ]),
+        ]),
+        htmlNode("p", "note-text", note.text || ""),
+      );
+      const editButton = htmlNode("button", "secondary", tr("edit"));
+      editButton.type = "button";
+      editButton.addEventListener("click", () => openNoteEditor(note));
+      const deleteButton = htmlNode("button", "secondary danger", tr("delete"));
+      deleteButton.type = "button";
+      deleteButton.addEventListener("click", () => deleteNote(note.id));
+      node.append(htmlNode("div", "note-actions", [editButton, deleteButton]));
+      return node;
+    }
+
+    function categoryLabel(value) {
+      const key = {
+        idea: "categoryIdea",
+        school: "categorySchool",
+        remember: "categoryRemember",
+        personal: "categoryPersonal",
+      }[value] || "categoryPersonal";
+      return tr(key);
+    }
+
+    function openNoteEditor(note = null) {
+      noteId.value = note?.id || "";
+      noteTitleInput.value = note?.title || "";
+      noteText.value = note?.text || "";
+      noteCategory.value = note?.category || "idea";
+      noteDate.value = note?.date || todayIso();
+      noteColor.value = note?.color || "#fff7cc";
+      noteIcon.value = note?.icon || "✦";
+      noteModal.classList.add("open");
+      noteTitleInput.focus();
+    }
+
+    function closeNoteEditor() {
+      noteModal.classList.remove("open");
+    }
+
+    async function loadNotes() {
+      const cached = loadCachedNotes();
+      if (cached) {
+        notesPayload = cached;
+        renderNotes();
+      }
+      try {
+        const response = await demoRequest(apiPath("/api/notes"), { cache: "no-store" });
+        const result = await response.json();
+        if (!response.ok || !result.ok) throw new Error(result.error || "Unable to load notes");
+        notesPayload = result;
+        cacheNotes(result);
+        renderNotes();
+      } catch {
+        renderNotes();
+      }
+    }
+
+    function loadCachedNotes() {
+      try {
+        const cached = JSON.parse(localStorage.getItem(NOTES_CACHE_KEY) || "null");
+        return cached && cached.ok ? cached : null;
+      } catch {
+        return null;
+      }
+    }
+
+    function cacheNotes(nextPayload) {
+      try {
+        localStorage.setItem(NOTES_CACHE_KEY, JSON.stringify(nextPayload));
+      } catch {
+        // Notes cache is best-effort offline data.
+      }
+    }
+
+    async function saveNote(event) {
+      event.preventDefault();
+      const note = {
+        id: noteId.value || undefined,
+        title: noteTitleInput.value,
+        text: noteText.value,
+        category: noteCategory.value,
+        date: noteDate.value || todayIso(),
+        color: noteColor.value,
+        icon: noteIcon.value,
+      };
+      const response = await demoRequest(apiPath("/api/notes"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ child: activeChild, note }),
+      });
+      const result = await response.json();
+      if (!response.ok || !result.ok) return;
+      notesPayload = result;
+      cacheNotes(result);
+      closeNoteEditor();
+      renderNotes();
+    }
+
+    async function deleteNote(id) {
+      const response = await demoRequest(apiPath("/api/notes/delete"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ child: activeChild, id }),
+      });
+      const result = await response.json();
+      if (!response.ok || !result.ok) return;
+      notesPayload = result;
+      cacheNotes(result);
+      renderNotes();
+    }
+
+    function renderHomework(homework) {
+      const node = template.content.firstElementChild.cloneNode(true);
+      const action = node.querySelector("[data-action]");
+      const subject = homework.subject || "";
+      const subjectKeyValue = subjectKey(subject);
+      node.dataset.id = homework.id;
+      node.classList.toggle("completed", homework.status === "completed");
+      node.classList.toggle("not-done", homework.status === "not_done");
+      node.querySelector("[data-due]").textContent = homework.dueDate ? `${tr("dueOn")} ${formatDueDate(homework.dueDate)}` : tr("noDueDate");
+      node.querySelector("[data-posted]").textContent = homework.postedDate ? `${tr("posted")} ${formatIso(homework.postedDate)}` : "";
+      node.querySelector("[data-subject]").textContent = subject || tr("subject");
+      renderSubjectIcon(node, subject);
+      applyDomainStyle(node, subjectKeyValue);
+      node.querySelector("[data-teacher]").textContent = homework.teacher || "";
+      node.querySelector("[data-task]").textContent = homework.text || "";
+      renderBadge(node, homework.status);
+      action.textContent = homework.status === "completed" ? tr("reopen") : tr("done");
+      action.addEventListener("click", (event) => {
+        event.stopPropagation();
+        setHomeworkStatus(homework, homework.status === "completed" ? "open" : "completed");
+      });
+      node.addEventListener("click", () => {
+        if (node.dataset.suppressClick === "true") {
+          node.dataset.suppressClick = "";
+          return;
+        }
+        openDetails(homework);
+      });
+      attachSwipe(node, homework);
+      return node;
+    }
+
+    function renderSubjectIcon(node, subject) {
+      const icon = node.querySelector("[data-icon]");
+      const key = subjectKey(subject);
+      icon.dataset.subjectKey = key;
+      const match = subjectIcon(key, subject);
+      icon.replaceChildren();
+      const childIcons = domainIcons.children?.[activeChild] || {};
+      const legacyIcons = domainIcons.icons || {};
+      const pickedImage = childIcons[key] || legacyIcons[key];
+      if (pickedImage) {
+        const image = document.createElement("img");
+        image.src = pickedImage;
+        image.alt = match.title;
+        icon.append(image);
+      } else {
+        icon.textContent = match.symbol;
+      }
+      icon.title = match.title;
+      let pressTimer = 0;
+      let longPressed = false;
+      icon.addEventListener("pointerdown", () => {
+        longPressed = false;
+        pressTimer = window.setTimeout(() => {
+          longPressed = true;
+          openDomainSettings(key, subject);
+        }, 520);
+      });
+      icon.addEventListener("pointerup", () => window.clearTimeout(pressTimer));
+      icon.addEventListener("pointercancel", () => window.clearTimeout(pressTimer));
+      icon.addEventListener("click", (event) => {
+        event.stopPropagation();
+        window.clearTimeout(pressTimer);
+        if (!longPressed) openDomainSettings(key, subject);
+      });
+    }
+
+    function subjectKey(subject) {
+      return subject.toUpperCase().replace(/[0-9]/g, "");
+    }
+
+    function subjectIcon(key, subject) {
+      const icons = {
+        M: { symbol: "∑", title: "Mathematics" },
+        E: { symbol: "Aa", title: "English" },
+        D: { symbol: "ß", title: "German" },
+        L: { symbol: "V", title: "Latin" },
+        F: { symbol: "Fr", title: "French" },
+        GWB: { symbol: "🌍", title: "Geopolitics" },
+        KUG: { symbol: "📐", title: "Technical drawing" },
+      };
+      const fallback = subject.slice(0, 2).toUpperCase() || "•";
+      return icons[key] || { symbol: fallback, title: subject || tr("subject") };
+    }
+
+    function applyDomainStyle(node, key) {
+      const style = domainStyles[activeChild]?.[key] || {};
+      node.style.setProperty("--domain-bg-color", style.color ? softenedColor(style.color) : "var(--domain-bg-color)");
+    }
+
+    function softenedColor(value) {
+      const rgb = hexToRgb(value);
+      return rgb ? `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.24)` : "var(--domain-bg-color)";
+    }
+
+    function hexToRgb(value) {
+      const match = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(value || "");
+      if (!match) return null;
+      return {
+        r: parseInt(match[1], 16),
+        g: parseInt(match[2], 16),
+        b: parseInt(match[3], 16),
+      };
+    }
+
+    async function loadDomainIcons() {
+      try {
+        const response = await demoRequest(apiPath("/api/domain-icons"), { cache: "no-store" });
+        const result = await response.json();
+        if (response.ok && result.ok) {
+          domainIcons = { icons: result.icons || {}, children: result.children || {} };
+        }
+      } catch {
+        domainIcons = { icons: {}, children: {} };
+      }
+    }
+
+    async function savePickedDomainImage() {
+      const file = imagePicker.files && imagePicker.files[0];
+      if (!file || !imageTargetKey) return;
+      const image = await readFileAsDataUrl(file);
+      const response = await demoRequest(apiPath("/api/domain-icons"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ child: activeChild, subjectKey: imageTargetKey, image }),
+      });
+      const result = await response.json();
+      if (response.ok && result.ok) {
+        domainIcons = { icons: result.icons || {}, children: result.children || {} };
+        openDomainSettings(imageTargetKey, domainTargetSubject);
+        renderActiveChild();
+      }
+    }
+
+    async function resetPickedDomainImage() {
+      if (!domainTargetKey) return;
+      const response = await demoRequest(apiPath("/api/domain-icons"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ child: activeChild, subjectKey: domainTargetKey, image: "" }),
+      });
+      const result = await response.json();
+      if (response.ok && result.ok) {
+        domainIcons = { icons: result.icons || {}, children: result.children || {} };
+        openDomainSettings(domainTargetKey, domainTargetSubject);
+        renderActiveChild();
+      }
+    }
+
+    function openDomainSettings(key, subject) {
+      domainTargetKey = key;
+      domainTargetSubject = subject;
+      const match = subjectIcon(key, subject);
+      domainPreviewTitle.textContent = `${subject || match.title} · ${payload?.children?.[activeChild]?.displayName || activeChild}`;
+      domainPreviewIcon.replaceChildren();
+      const pickedImage = domainIcons.children?.[activeChild]?.[key] || domainIcons.icons?.[key];
+      if (pickedImage) {
+        const image = document.createElement("img");
+        image.src = pickedImage;
+        image.alt = match.title;
+        domainPreviewIcon.append(image);
+      } else {
+        domainPreviewIcon.textContent = match.symbol;
+      }
+      domainColor.value = domainStyles[activeChild]?.[key]?.color || "#ffffff";
+      domainModal.classList.add("open");
+    }
+
+    function closeDomainSettings() {
+      domainModal.classList.remove("open");
+    }
+
+    function updateDomainColor() {
+      if (!domainTargetKey) return;
+      const style = domainStyles[activeChild]?.[domainTargetKey] || {};
+      setDomainStyle(domainTargetKey, { ...style, color: domainColor.value });
+    }
+
+    function resetDomainColorValue() {
+      if (!domainTargetKey || !domainStyles[activeChild]) return;
+      delete domainStyles[activeChild][domainTargetKey];
+      saveDomainStyles();
+      domainColor.value = "#ffffff";
+      renderActiveChild();
+    }
+
+    function setDomainStyle(key, style) {
+      domainStyles[activeChild] = domainStyles[activeChild] || {};
+      domainStyles[activeChild][key] = style;
+      saveDomainStyles();
+      renderActiveChild();
+    }
+
+    function openDetails(homework) {
+      detailTitle.textContent = tr("details");
+      detailContent.dataset.view = "details";
+      const teacherInitials = (homework.teacher || "?").slice(0, 2).toUpperCase();
+      const attachments = homework.attachments && homework.attachments.length ? homework.attachments.join(", ") : tr("none");
+      const subjectTitle = homework.subjectLongName ? `${homework.subject} · ${homework.subjectLongName}` : homework.subject || tr("subject");
+      const teacherOfficeHours = matchingOfficeHours(homework.teacher);
+      const contactRows = teacherOfficeHours.length
+        ? teacherOfficeHours.map(formatOfficeHour).join("\n\n")
+        : tr("contactUnavailable");
+      detailContent.replaceChildren(
+        htmlNode("div", "detail-hero", [
+          htmlNode("div", "teacher-avatar", teacherInitials),
+          htmlNode("div", "", [
+            htmlNode("p", "detail-title", subjectTitle),
+            htmlNode("div", "detail-subtitle", homework.teacher || tr("teacherContact")),
+          ]),
+        ]),
+        detailRow(tr("dueOn"), homework.dueDate ? formatDueDate(homework.dueDate) : tr("noDueDate")),
+        detailRow(tr("posted"), homework.postedDate ? formatIso(homework.postedDate) : tr("none")),
+        detailRow(tr("status"), homework.status === "completed" ? tr("completed") : homework.status === "not_done" ? tr("notDone") : tr("open")),
+        detailRow(tr("task"), homework.text || tr("none")),
+        detailRow(tr("attachments"), attachments),
+        detailRow(tr("teacherContact"), contactRows),
+      );
+      detailModal.classList.add("open");
+    }
+
+    function closeDetails() {
+      detailModal.classList.remove("open");
+    }
+
+    async function loadOfficeHours() {
+      const cached = loadCachedOfficeHours();
+      if (cached) officeHours = cached;
+      try {
+        const response = await demoRequest(apiPath("/api/office-hours"), { cache: "no-store" });
+        const result = await response.json();
+        if (!response.ok || !result.ok) throw new Error(result.error || "Unable to load office hours");
+        officeHours = result;
+        cacheOfficeHours(result);
+      } catch {
+        // Office hours remain optional and can be opened from the cached copy.
+      }
+    }
+
+    function loadCachedOfficeHours() {
+      try {
+        const cached = JSON.parse(localStorage.getItem(OFFICE_HOURS_CACHE_KEY) || "null");
+        return cached && cached.ok ? cached : null;
+      } catch {
+        return null;
+      }
+    }
+
+    function cacheOfficeHours(nextPayload) {
+      try {
+        localStorage.setItem(OFFICE_HOURS_CACHE_KEY, JSON.stringify(nextPayload));
+      } catch {
+        // Office-hours cache is best-effort offline data.
+      }
+    }
+
+    function matchingOfficeHours(teacher) {
+      const needle = normalizeTeacher(teacher);
+      if (!needle) return [];
+      return (officeHours?.hours || []).filter((row) =>
+        [row.teacher, row.teacherFullName].some((value) => normalizeTeacher(value).includes(needle)),
+      );
+    }
+
+    function normalizeTeacher(value) {
+      return String(value || "").trim().toUpperCase();
+    }
+
+    function formatOfficeHour(row) {
+      const date = row.date ? formatIso(row.date) : tr("none");
+      const time = [row.startTime, row.endTime].filter(Boolean).join(" - ");
+      const status = row.available ? tr("available") : tr("unavailable");
+      const room = row.room ? `${tr("room")}: ${row.room}` : "";
+      const phone = row.phone || "";
+      const email = row.email || "";
+      const note = row.textByNoAppointment || "";
+      return [
+        row.teacherFullName || row.teacher || tr("teacherContact"),
+        `${date}${time ? `, ${time}` : ""}`,
+        status,
+        room,
+        phone,
+        email,
+        note,
+      ].filter(Boolean).join("\n");
+    }
+
+    function openOfficeHours() {
+      const rows = officeHours?.hours || [];
+      detailTitle.textContent = tr("officeHours");
+      detailContent.dataset.view = "office-hours";
+      detailContent.replaceChildren(
+        htmlNode("div", "detail-hero", [
+          htmlNode("div", "teacher-avatar", "S"),
+          htmlNode("div", "", [
+            htmlNode("p", "detail-title", tr("officeHours")),
+            htmlNode("div", "detail-subtitle", rows.length ? `${rows.length}` : tr("noOfficeHours")),
+          ]),
+        ]),
+        ...(rows.length ? rows.flatMap(officeHourRows) : [htmlNode("p", "empty", tr("noOfficeHours"))]),
+      );
+      detailModal.classList.add("open");
+    }
+
+    function officeHourRows(row) {
+      return [
+        detailRow(row.teacherFullName || row.teacher || tr("teacherContact"), formatOfficeHour(row)),
+      ];
+    }
+
+    async function loadCancellations() {
+      const cached = loadCachedCancellations();
+      if (cached) {
+        cancellations = cached;
+        updateCancellationButton();
+      }
+      try {
+        const response = await demoRequest(apiPath("/api/cancelled-lessons"), { cache: "no-store" });
+        const result = await response.json();
+        if (!response.ok || !result.ok) throw new Error(result.error || "Unable to load cancellations");
+        cancellations = result;
+        cacheCancellations(result);
+        updateCancellationButton();
+      } catch {
+        updateCancellationButton();
+      }
+    }
+
+    function loadCachedCancellations() {
+      try {
+        const cached = JSON.parse(localStorage.getItem(CANCELLATIONS_CACHE_KEY) || "null");
+        return cached && cached.ok ? cached : null;
+      } catch {
+        return null;
+      }
+    }
+
+    function cacheCancellations(nextPayload) {
+      try {
+        localStorage.setItem(CANCELLATIONS_CACHE_KEY, JSON.stringify(nextPayload));
+      } catch {
+        // Cancellations are also best-effort offline data.
+      }
+    }
+
+    function futureCancellations() {
+      const today = todayIso();
+      const lessons = cancellations?.children?.[activeChild]?.lessons || [];
+      return lessons.filter((lesson) => lesson.date >= today);
+    }
+
+    function todayIso() {
+      const now = new Date("2026-10-13T12:00:00Z");
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const day = String(now.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    function updateCancellationButton() {
+      const lessons = futureCancellations();
+      cancelAlert.classList.toggle("show", lessons.length > 0);
+      cancelAlert.textContent = lessons.length ? `${tr("cancelledButton")} ${lessons.length}` : tr("cancelledButton");
+    }
+
+    function openCancellations() {
+      const lessons = futureCancellations();
+      detailTitle.textContent = tr("cancelledTitle");
+      detailContent.dataset.view = "cancellations";
+      detailContent.replaceChildren(
+        htmlNode("div", "detail-hero", [
+          htmlNode("div", "teacher-avatar", "!"),
+          htmlNode("div", "", [
+            htmlNode("p", "detail-title", tr("cancelledTitle")),
+            htmlNode("div", "detail-subtitle", payload?.children?.[activeChild]?.displayName || activeChild),
+          ]),
+        ]),
+        ...(lessons.length ? lessons.flatMap(cancelledLessonRows) : [htmlNode("p", "empty", tr("noCancellations"))]),
+      );
+      detailModal.classList.add("open");
+    }
+
+    function cancelledLessonRows(lesson) {
+      const subject = lesson.subject || tr("subject");
+      const teacher = lesson.teacher ? `\n${lesson.teacher}` : "";
+      const room = lesson.room ? `\n${tr("room")}: ${lesson.room}` : "";
+      const text = lesson.text ? `\n${lesson.text}` : "";
+      return [
+        detailRow(tr("date"), lesson.date ? formatIso(lesson.date) : tr("none")),
+        detailRow(tr("time"), [lesson.startTime, lesson.endTime].filter(Boolean).join(" - ") || tr("none")),
+        detailRow(tr("subject"), `${subject}${teacher}${room}${text}`),
+      ];
+    }
+
+    function detailRow(label, value) {
+      return htmlNode("div", "detail-row", [
+        htmlNode("div", "detail-label", label),
+        htmlNode("div", "detail-value", value),
+      ]);
+    }
+
+    function htmlNode(tag, className, content) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (Array.isArray(content)) {
+        content.forEach((child) => node.append(child));
+      } else {
+        node.textContent = content || "";
+      }
+      return node;
+    }
+
+    function readFileAsDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function renderBadge(node, status) {
+      const badge = node.querySelector("[data-badge]");
+      badge.className = `badge ${status.replace("_", "-")}`;
+      badge.textContent = status === "completed" ? tr("completed") : status === "not_done" ? tr("notDone") : tr("open");
+    }
+
+    function attachSwipe(node, homework) {
+      let startX = 0;
+      let currentX = 0;
+      let dragging = false;
+      let moved = false;
+      node.addEventListener("pointerdown", (event) => {
+        if (event.target.closest("button, [data-icon]")) return;
+        startX = event.clientX;
+        currentX = event.clientX;
+        dragging = true;
+        moved = false;
+        node.setPointerCapture(event.pointerId);
+      });
+      node.addEventListener("pointermove", (event) => {
+        if (!dragging) return;
+        currentX = event.clientX;
+        const delta = Math.max(-110, Math.min(110, currentX - startX));
+        moved = moved || Math.abs(delta) > 8;
+        node.style.transform = `translateX(${delta}px)`;
+        node.style.opacity = String(1 - Math.min(Math.abs(delta) / 300, 0.18));
+      });
+      node.addEventListener("pointerup", () => {
+        if (!dragging) return;
+        dragging = false;
+        if (moved) node.dataset.suppressClick = "true";
+        finishSwipe(node, homework, currentX - startX);
+      });
+      node.addEventListener("pointercancel", () => resetSwipe(node));
+    }
+
+    function finishSwipe(node, homework, delta) {
+      if (delta > 82 && homework.status !== "completed") {
+        setHomeworkStatus(homework, "completed");
+        return;
+      }
+      if (delta < -82 && homework.status === "completed") {
+        setHomeworkStatus(homework, "open");
+        return;
+      }
+      resetSwipe(node);
+    }
+
+    function resetSwipe(node) {
+      node.style.transform = "";
+      node.style.opacity = "";
+    }
+
+    async function setHomeworkStatus(homework, status) {
+      setStatus("saving", "loading");
+      const response = await demoRequest(apiPath("/api/homework-state"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ child: activeChild, id: homework.id, status }),
+      });
+      const result = await response.json();
+      if (!response.ok || !result.ok) {
+        setStatus("saveFailed", "error");
+        return;
+      }
+      await loadHomeworks();
+    }
+
+    function formatIso(value) {
+      const [year, month, day] = value.split("-");
+      return `${day}.${month}.${year}`;
+    }
+
+    function formatDueDate(value) {
+      const date = new Date(`${value}T12:00:00`);
+      const weekday = tr("weekdays")[date.getDay() === 0 ? 6 : date.getDay() - 1];
+      const [, month, day] = value.split("-");
+      return `${weekday}, ${day}.${month}.`;
+    }
+
+    async function loadHomeworks() {
+      const cached = loadCachedHomeworks();
+      if (cached) {
+        payload = cached;
+        renderActiveChild();
+        metaEl.textContent = `${tr("updated")} ${payload.fetchedAt.replace("T", " ")} · ${formatIso(payload.window.start)} ${tr("to")} ${formatIso(payload.window.end)}`;
+        setStatus("offlineCache", "ready");
+      }
+      setStatus("refreshing", "loading");
+      try {
+        const response = await demoRequest(apiPath("/api/homeworks"));
+        payload = await response.json();
+        if (!response.ok || !payload.ok) {
+          throw new Error(payload.error || "Unable to load homework");
+        }
+        cacheHomeworks(payload);
+        renderActiveChild();
+        metaEl.textContent = `${tr("updated")} ${payload.fetchedAt.replace("T", " ")} · ${formatIso(payload.window.start)} ${tr("to")} ${formatIso(payload.window.end)}`;
+        setStatus("live", "ready");
+      } catch (error) {
+        if (payload) {
+          setStatus("offlineCache", "ready");
+        } else {
+          setStatus("webUntisUnavailable", "error");
+          metaEl.textContent = error.message;
+        }
+      }
+    }
+
+    function loadCachedHomeworks() {
+      try {
+        const cached = JSON.parse(localStorage.getItem(HOMEWORK_CACHE_KEY) || "null");
+        return cached && cached.ok ? cached : null;
+      } catch {
+        return null;
+      }
+    }
+
+    function cacheHomeworks(nextPayload) {
+      try {
+        localStorage.setItem(HOMEWORK_CACHE_KEY, JSON.stringify(nextPayload));
+      } catch {
+        // Large custom images may consume storage; homework cache is best-effort.
+      }
+    }
+
+    loadServerPreferences();
+    loadDomainIcons().then(loadHomeworks);
+    loadCancellations();
+    loadOfficeHours();
+    loadNotes();
+  </script>
+</body>
+</html>

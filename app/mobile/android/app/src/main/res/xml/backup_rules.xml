@@ -1,0 +1,4 @@
+<full-backup-content>
+  <exclude domain="sharedpref" path="untis-homework-native.xml" />
+  <exclude domain="sharedpref" path="untis-homework-credentials.xml" />
+</full-backup-content>
