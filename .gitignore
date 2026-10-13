@@ -15,3 +15,25 @@ playwright-report/
 *.keystore
 .env
 runtime/
+
+# Privacy: local credentials, exports and test caches
+.env*
+*.env.*
+!.env.example
+!.env.sample
+!.env.template
+!*.env.example
+!*.env.sample
+!*.env.template
+secrets.env
+*.key
+*.pem
+*.p12
+*.p8
+*.sqlite*
+*.db
+*.log
+/exports/
+/attachments/
+/local-backups/
+.pytest_cache/
