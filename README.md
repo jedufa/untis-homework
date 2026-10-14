@@ -1,81 +1,130 @@
-# Untis Homework
+<div align="center">
+
+# 📚 Untis Homework
 
 ### Homework, without the daily scramble.
 
-What is due next? What is already finished? Which child was that task for?
-This small family homework interface keeps those answers together, with separate
-child views, local completion tracking, subject colours and room for reminders.
+**One calm place to see what's due, what's done, and who it belongs to.**
 
-**This release is an offline demonstration with fictional data. It does not
-connect to a school, WebUntis account or hosted backend.** Open the real dashboard
-and explore the workflow without credentials, then adapt the source for your own
-project.
+An offline family homework dashboard, built with fictional schoolwork so you can explore the idea without connecting a real account.
+
+[**See the dashboard ↓**](#see-the-dashboard) · [**Try it locally →**](#open-the-browser-demo) · [**Build and validate →**](#build-and-validate)
+
+<br>
+
+![Status](https://img.shields.io/badge/status-experimental%20source%20demo-536171?style=flat-square)
+![Mode](https://img.shields.io/badge/browser-offline-316d74?style=flat-square)
+![Android](https://img.shields.io/badge/Android-Kotlin%20%2B%20Compose-3d795c?style=flat-square)
+![License](https://img.shields.io/badge/license-MIT-24836b?style=flat-square)
+
+</div>
+
+> **Important:** This is a fictional, offline demonstration. There is **no live Untis or WebUntis connection**, no school login, and no hosted backend. This is an independent project, not affiliated with or endorsed by Untis or WebUntis.
+
+---
+
+## See the dashboard
 
 <table>
-<tr><th>See the week ahead</th><th>Move finished work out of the way</th></tr>
-<tr><td><img src="docs/screenshots/homework.png" width="460" alt="Fictional homework for Alex in the offline dashboard"></td><td><img src="docs/screenshots/completed.png" width="460" alt="Completed fictional homework moved to the archive"></td></tr>
-<tr><th>Keep a small reminder</th><th>Give each child a separate view</th></tr>
-<tr><td><img src="docs/screenshots/notes.png" width="460" alt="A local fictional reminder"></td><td><img src="docs/screenshots/family.png" width="460" alt="Robin's separate fictional homework"></td></tr>
+  <tr>
+    <td align="center" width="50%">
+      <a href="docs/screenshots/homework.png"><img src="docs/screenshots/homework.png" alt="Actual offline dashboard showing fictional homework due for Alex" width="440"></a>
+    </td>
+    <td align="center" width="50%">
+      <a href="docs/screenshots/completed.png"><img src="docs/screenshots/completed.png" alt="Actual offline dashboard showing completed fictional homework in the archive" width="440"></a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center"><strong>01 · See what's next</strong><br><sub>Homework, subject colors, and upcoming tasks.</sub></td>
+    <td align="center"><strong>02 · Close the loop</strong><br><sub>Move finished work into the completed view.</sub></td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="docs/screenshots/notes.png"><img src="docs/screenshots/notes.png" alt="Local reminder displayed in the real offline browser dashboard" width="440"></a>
+    </td>
+    <td align="center">
+      <a href="docs/screenshots/family.png"><img src="docs/screenshots/family.png" alt="Separate fictional homework view for Robin" width="440"></a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center"><strong>03 · Remember the little things</strong><br><sub>Add a note without another app.</sub></td>
+    <td align="center"><strong>04 · Keep children separate</strong><br><sub>Switch between individual family views.</sub></td>
+  </tr>
 </table>
 
-These are genuine Chromium captures of the included dashboard. All names and
-homework are invented; the demonstration clock is fixed to 13 October 2026.
+<sub>Genuine Chromium captures of the included browser dashboard. Names and assignments are fictional; the demonstration clock is fixed to 13 October 2026.</sub>
 
-## Try it
+## A small workflow, deliberately simple
 
-Open [`docs/index.html`](docs/index.html) from your downloaded checkout in Chromium.
-There is no server to install. Mark a task complete, reload, switch between Alex
-and Robin, write a note, or change a subject's colour. State stays in your browser.
-The settings dialog can reset this demo without clearing unrelated browser data.
+| What you can do | How it works in this release |
+|:--|:--|
+| **See the week ahead** | Read upcoming fictional assignments in the browser dashboard. |
+| **Mark work complete** | Move items to the completed view and retain local state after a reload. |
+| **Keep a reminder** | Add a local note in the browser version. |
+| **Separate the children** | Switch between independent fictional child views. |
+| **Make it recognizable** | Change subject colors and keep those preferences locally. |
 
-The included Kotlin/Compose Android app presents the same synthetic homework,
-with open/archive views, swipe completion and persistent child/subject appearance.
-It has no Internet permission or account client. Build instructions are in
-[the validation guide](docs/validation.md).
+There are two actual interfaces in the source: the **offline browser dashboard** and an **Android Kotlin/Compose prototype**. Their capabilities are not identical; the Android demo focuses on homework, while the browser also provides notes.
 
-## What is here
+## Open the browser demo
 
-- The browser dashboard, local adapter and fixed fictional fixtures.
-- An offline Android implementation and focused JVM tests.
-- Python normalization, completion tracking, notes and appearance storage helpers.
-- Swift model, codec and colour references with codec tests. These are **untested
-  porting references**, not a buildable iOS application.
+**No server, account, school credentials, or API key is required.**
 
-Live school integration, account/password storage, production gateway, deployment
-and app-store scripts, iOS UI/host, original private history and unverified artwork
-are excluded. The browser has notes; the Android edition focuses on homework.
-Neither is a complete live school client in this source release.
+```bash
+git clone https://github.com/jedufa/untis-homework.git
+cd untis-homework
+```
 
-## Build and check
+Open [`docs/index.html`](docs/index.html) from your downloaded checkout in **Chromium**. Try completing a task, switching between Alex and Robin, adding a reminder, and reloading. Browser state persists locally. Settings can reset the demo without clearing unrelated browser data.
+
+**This is a local file demo, not a hosted school service.** It neither retrieves nor updates real homework.
+
+## What's included
+
+| Surface | Present in the source | Release boundary |
+|:--|:--|:--|
+| **Browser** | Dashboard, local adapter and fixed fictional fixtures | Offline demonstration |
+| **Android** | Kotlin/Compose homework views, archive, swipe completion, child/subject appearance | Debug builds only; no published APK |
+| **Python** | Normalization, completion, notes and appearance helpers | Local utilities and tests |
+| **Swift** | Model, codec and color references | Porting references only; **not** a buildable iOS app |
+
+Live school integrations, account/password handling, production gateways, deployment, an iOS app, private development history and unverified artwork are **not included**.
+
+## Build and validate
+
+The project includes browser tests, Python tests and an Android test/build path:
 
 ```bash
 python3 -m unittest discover -s tests
 npm ci --ignore-scripts
 npx playwright install chromium
 npm run test:browser
-# With Java 17 and Android SDK/platform 36 available:
+
+# With Java 17 and Android SDK/platform 36 installed:
 cd app/mobile/android
 ./gradlew testDebugUnitTest assembleDebug
 ```
 
-The candidate passed 18 Python tests, 13 Android JVM tests and two browser
-workflows, including completion/notes persistence, child separation, 320/390px
-layouts and network-call guards. See [validation and its limits](docs/validation.md).
-Build outputs are local development artifacts; this source prerelease distributes
-no APK, IPA or other installable app.
+The source-release candidate passed **18 Python tests, 13 Android JVM tests and two browser workflows**. Checks included local persistence, child separation, 320/390-pixel layouts and network-call guards. See [validation and its limitations](docs/validation.md) for details.
 
-## Take it further
+No APK, IPA or other installable release binary is distributed here.
 
-Experimental and unmaintained. There is no support, review, security-update or
-release commitment. Fork it, adapt the family workflow, or become its maintainer.
-Live integration would require your own authorized access and a separate security
-and terms review; it has not been tested here.
+## Privacy, independence and project status
 
-First-party code, tests and documentation use [MIT](LICENSE). Separately licensed
-components retain their [third-party notices](THIRD_PARTY_NOTICES.md).
-This is an independent project, not affiliated with or endorsed by Untis or
-WebUntis. Their names and marks are not granted by this project's license.
+The browser keeps data in ordinary browser storage; Android uses local preferences. **This is not encrypted storage.** Notes and imported pictures remain on the device, and clearing browser/app storage can remove them. [Read the security notes](SECURITY.md).
 
-Local state is ordinary browser storage or Android preferences, not an encrypted
-vault. Imported pictures and notes remain on that device; clearing app/browser
-storage removes them. See [SECURITY.md](SECURITY.md).
+This repository is **experimental and unmaintained**. There is no commitment to support, security updates, issue review or future releases. Fork it, adapt the family workflow, or build your own authorized school integration after reviewing the relevant security requirements and terms.
+
+[**Validation**](docs/validation.md) · [**Security**](SECURITY.md) · [**License**](LICENSE) · [**Third-party notices**](THIRD_PARTY_NOTICES.md)
+
+First-party code, tests and documentation are available under the **MIT License**. Untis and WebUntis names and trademarks remain with their respective owners.
+
+---
+
+<div align="center">
+
+### Less hunting for homework. More room for the rest of the day.
+
+*An offline idea, ready for someone to take further.*
+
+</div>
